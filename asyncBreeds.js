@@ -1,19 +1,17 @@
-// asyncBreeds.js
 const fs = require('fs');
 
-const breedDetailsFromFile = function(breed) {
+const breedDetailsFromFile = function(breed, callback) {
   console.log('breedDetailsFromFile: Calling readFile...');
   fs.readFile(`./data/${breed}.txt`, 'utf8', (error, data) => {
-    // ISSUE: Returning from inner callback function, not our main function.
-    console.log('Callback: I have the data!')
-    if (!error) return data; 
+    // CHANGE 1: Pass data back via callback instead of return.
+    console.log('Callback: I have the data!');
+    console.log(typeof data);
+    let dataArr = data.split(":");
+    console.log(dataArr[1]);
+    const expectedDesc = "The golden eyes and the shiny black coat of the Bombay is absolutely striking. Likely to bond most with one family member, the Bombay will follow you from room to room and will almost always have something to say about what you are doing, loving attention and to be carried around, often on his caregiver's shoulder.";
+    console.log(dataArr[1] === expectedDesc);
+    if (!error) callback(dataArr[1]);
   });
-  // ISSUE: Attempting to return data out here will also not work.
-  //        Currently not returning anything from here, so this function returns undefined.
-}
-
-// we try to get the return value
-const bombay = breedDetailsFromFile('Bombay');
-console.log('Return Value: ', bombay) // => will NOT print out details, instead we will see undefined!npm i --save-dev mocha chai
+};
 
 module.exports = breedDetailsFromFile;
